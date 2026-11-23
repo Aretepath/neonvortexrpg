@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071015">
+  <title>Neon Vortex Protocol — Aurion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>A</span></div>
+        <div>
+          <p class="brand-title">NEON VORTEX PROTOCOL</p>
+          <p class="brand-subtitle">AURION / FIELD INTERFACE</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <label class="visually-hidden" for="readingSizeSelect">Reading text size</label>
+        <select class="setting-select" id="readingSizeSelect">
+          <option value="small">Text · Small</option>
+          <option value="standard">Text · Standard</option>
+          <option value="large">Text · Large</option>
+        </select>
+        <div class="volume-control">
+          <label class="visually-hidden" for="musicVolumeInput">Background music volume</label>
+          <input class="volume-input" id="musicVolumeInput" type="range" min="0" max="30" step="5" value="10">
+          <output class="volume-output" id="musicVolumeOutput" for="musicVolumeInput" aria-live="polite">10%</output>
+        </div>
+        <button class="icon-button" id="exportSaveButton" type="button">Export save</button>
+        <button class="icon-button" id="importSaveButton" type="button">Load save</button>
+        <input class="visually-hidden" id="saveFileInput" type="file" accept=".json,application/json" tabindex="-1" aria-hidden="true">
+        <button class="icon-button" id="musicButton" type="button" aria-label="Turn background music off" title="Background music · 10% volume">♫</button>
+        <button class="icon-button" id="menuButton" type="button" aria-label="Return to title screen" title="Title screen">⌂</button>
+      </div>
+    </header>
+
+    <section class="title-screen" id="titleScreen" aria-labelledby="gameTitle">
+      <div class="title-content">
+        <div class="title-kicker">SEATTLE · 2076 · GHOST PROTOCOL ACTIVE</div>
+        <h1 class="title" id="gameTitle">NEON<br><em>VORTEX</em></h1>
+        <p class="title-sub">Where reality fractures and code becomes fate.</p>
+        <div class="title-meta"><span>A point-and-click story</span><span>12 chapters + convergence interlude</span><span>One city to save</span></div>
+        <button class="start-button" id="startButton" type="button">Begin the protocol <span aria-hidden="true">→</span></button>
+        <button class="start-button resume-button hidden" id="resumeButton" type="button">Continue story</button>
+        <p class="save-note">Progress autosaves in this browser. Use Export save to keep a backup or Load save to restore one. Display preferences are saved on this device.</p>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="hidden" aria-label="Game">
+      <div class="game-grid">
+        <div class="stage-column">
+          <div class="scene-meta">
+            <div class="chapter-label" id="chapterLabel"></div>
+            <div class="scene-number" id="sceneNumber"></div>
+          </div>
+          <div class="scene" id="scene" aria-label="Explore the scene">
+            <div class="scene-stamp" id="sceneStamp"></div>
+          </div>
+          <section class="story-card card" aria-live="polite">
+            <div class="story-top">
+              <h2 class="story-title" id="storyTitle"></h2>
+              <div class="story-location" id="storyLocation"></div>
+            </div>
+            <p class="story-text" id="storyText"></p>
+            <div class="story-tools">
+              <button class="icon-button read-aloud-button" id="readAloudButton" type="button" aria-label="Read current story text aloud" aria-pressed="false">Read aloud</button>
+              <span class="visually-hidden" id="readAloudStatus" role="status" aria-live="polite"></span>
+            </div>
+            <div class="story-actions" id="storyActions"></div>
+            <div class="footer-row">
+              <p class="hint" id="sceneHint"></p>
+              <button class="icon-button replay-button hidden" id="replayEndingButton" type="button" aria-label="Revisit the final decision">↶ Revisit final decision</button>
+              <button class="continue-button" id="continueButton" type="button" disabled>Continue <span aria-hidden="true">→</span></button>
+            </div>
+          </section>
+        </div>
+
+        <aside class="side-panel" aria-label="Mission information">
+          <section class="card">
+            <h2 class="card-heading">Current objective</h2>
+            <div class="objectives" id="objectives"></div>
+          </section>
+          <section class="card">
+            <h2 class="card-heading">Aurion’s path</h2>
+            <div class="path-card">
+              <p class="path-value" id="pathValue">Unwritten</p>
+              <p class="path-description" id="pathDescription">Your decisions are shaping who Aurion becomes.</p>
+            </div>
+          </section>
+          <section class="card">
+            <h2 class="card-heading">People &amp; trust</h2>
+            <div class="relationship-list" id="relationships"></div>
+          </section>
+          <section class="card inventory">
+            <h2 class="card-heading">Evidence &amp; gear</h2>
+            <div class="inventory-items" id="inventoryItems"></div>
+          </section>
+          <section class="card echo-card">
+            <div class="echo-label">ECHO / NEURAL LINK</div>
+            <p class="echo-text" id="echoText">Link stable. I’m here, Hunter.</p>
+            <details class="echo-chat">
+              <summary>Open a private channel with Echo</summary>
+              <p class="echo-chat-note">Ask about this story. Echo’s local, authored replies are a side conversation and never change your choices or progress.</p>
+              <div class="echo-chat-log" id="echoChatLog" role="log" aria-live="polite" aria-relevant="additions">
+                <p class="echo-message">Echo: Channel open. Ask me about the people, our mission, or what we’ve learned.</p>
+              </div>
+              <form class="echo-chat-form" id="echoChatForm">
+                <label class="visually-hidden" for="echoChatInput">Message Echo</label>
+                <input class="echo-chat-input" id="echoChatInput" type="text" maxlength="240" autocomplete="off" placeholder="Ask Echo…" required>
+                <button class="echo-chat-send" type="submit">Send</button>
+              </form>
+            </details>
+          </section>
+        </aside>
+      </div>
+    </section>
+    <div class="toast hidden" id="toast" role="status"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/tone@15.1.22/build/Tone.js"></script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
